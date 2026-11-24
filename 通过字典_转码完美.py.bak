@@ -1,0 +1,97 @@
+import os
+import subprocess
+import time
+
+
+class video:
+
+    def __init__(self, name):
+        self.name = name
+
+    def get_video(self):
+        pathss = os.getcwd()
+        file_list = os.listdir(pathss)
+        vido_list = [s for s in file_list if '*' in s]
+
+        my_dict = {}
+
+        kzhan_list = ["mp4", "avi", "wmv", "rmvb", "mov", "mkv"]
+
+        for vido_path in os.listdir(os.chdir(pathss)):
+
+            # 以点为分隔符，分割文件名和扩展名; s为路径+文件名，不含扩展名
+            s = vido_path.split(".")
+            # ss为扩展名，这里统一使用小写
+            ss = s[len(s) - 1].lower()
+            for kzhan in kzhan_list:
+                if ss == kzhan:
+                    # list_vido_any.append(vido_path)
+                    notkuozhan_video_name = os.path.splitext(vido_path)[0]
+                    out_videos = notkuozhan_video_name + "_h264" + ".mp4"
+                    # print(vido_path)
+                    # print(out_videos)
+                    my_dict.setdefault(vido_path, out_videos)
+
+        print(my_dict)
+        return my_dict
+
+    def run_zhuanma(self, fbl, input_video, output_video):
+        if fbl == 0:
+            cmd = (
+                "ffmpeg -i {input_video} -vcodec h264 -preset veryfast -crf 20 -maxrate 2000k -bufsize 3000k -r 29.97 {output_video}".
+                format(input_video=input_video, output_video=output_video))
+            print("原始分辨率:", cmd)
+            subprocess.run(cmd)
+        elif fbl == 960:
+            cmd = (
+                "ffmpeg -i {input_video} -vcodec h264 -preset veryfast -crf 23 -maxrate 1300k -bufsize 3000k -vf scale=960:540 -r 29.97 {output_video}".
+                format(input_video=input_video, output_video=output_video))
+            print("960P:", cmd)
+            subprocess.run(cmd)
+        elif fbl == 2000:
+            cmd = (
+                "ffmpeg -i {input_video} -vcodec h264 -preset veryfast -crf 23 -maxrate 1300k -bufsize 3000k -vf scale=1280:720 -r 29.97 {output_video}".
+                format(input_video=input_video, output_video=output_video))
+            print("960P:", cmd)
+            subprocess.run(cmd)
+        elif fbl == 3000:
+            cmd = (
+                "ffmpeg -i {input_video} -vcodec h264 -preset veryfast -crf 22 -maxrate 2000k -bufsize 3000k -vf scale=1280:720 -r 29.97 {output_video}".
+                format(input_video=input_video, output_video=output_video))
+            print("3000_720p:", cmd)
+            subprocess.run(cmd)
+        elif fbl == 4000:
+            cmd = (
+                "ffmpeg -i {input_video} -vcodec h264 -preset slow -qcomp 0.5 -psy-rd 0.3:0 -aq-mode 2 -aq-strength 0.8 -r 29.97 {output_video}".
+                format(input_video=input_video, output_video=output_video))
+            print("4000超清_720p:", cmd)
+            subprocess.run(cmd)
+        else:
+            print("输入有误")
+
+    def move_file(self, inputvideo, outvideos):
+        if not os.path.exists("ok"):
+            os.makedirs("ok")
+        if not os.path.exists("source_data"):
+            os.makedirs("source_data")
+
+        os.system("move {} {} >nul".format(inputvideo, 'source_data'))
+        os.system("move {} {} >nul".format(outvideos, 'ok'))
+
+    def xiuxi(self, xiuxi_time=300):
+        while xiuxi_time > 0:
+            print("程序休息300秒倒计时：", xiuxi_time, "秒")
+            xiuxi_time -= 1
+            time.sleep(1)
+            os.system('cls')
+
+
+
+p1 = video("3000_720P")
+
+# # 元组
+my_dict = p1.get_video()
+for key, value in my_dict.items():
+    p1.run_zhuanma(0, key, value)
+    p1.move_file(key, value)
+    p1.xiuxi(1)

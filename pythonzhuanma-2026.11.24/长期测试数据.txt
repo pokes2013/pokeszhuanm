@@ -1,0 +1,21 @@
+
+原始整合过的：
+
+2000
+
+ffmpeg -i {input_video} -vcodec h264 -preset veryfast -crf 22 -maxrate 2000k -bufsize 3000k -vf scale=1280:720 -r 29.97 {output_video}".
+
+
+
+VIP3000
+
+ffmpeg -i "%~1" -vcodec h264 -preset veryfast -tune:v ssim -qmin 20 -crf 22 -maxrate 1800k -bufsize 2000k -r 29.97 -vf scale=1280:-2 -acodec aac -b:a 192k -ac 2 "%~dpn1_ok.mp4" && echo 转换OK
+
+
+
+
+
+
+VIP3000+
+
+ffmpeg -i "%~1" -vcodec h264 -preset veryfast -tune:v ssim -qmin 18 -crf 19 -maxrate 1800k -bufsize 2000k -r 29.97 -vf scale=1280:-2 -acodec aac -b:a 192k -ac 2 "%~dpn1_ok.mp4" && echo 转换OK
